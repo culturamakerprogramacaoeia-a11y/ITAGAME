@@ -4,7 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_jwt_extended import JWTManager
 import os
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='../dist', static_url_path='/')
 CORS(app)
 
 # Configurações para PythonAnywhere / Local
@@ -16,8 +16,12 @@ db = SQLAlchemy(app)
 jwt = JWTManager(app)
 
 @app.route('/')
+def index():
+    return app.send_static_file('index.html')
+
+@app.route('/health')
 def home():
-    return jsonify({"message": "ITAGAME API 2.0 - Online"}), 200
+    return jsonify({"status": "healthy", "message": "ITAGAME API 2.0 - Online"}), 200
 
 # Endpoint de teste para Gamificação
 @app.route('/api/stats', methods=['GET'])
